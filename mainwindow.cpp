@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "controls.cpp"
 #include "MediaStatus.cpp"
+#include "MediaError.cpp"
 #include "populateMusic.cpp"
 
 QString MainWindow::MusicFile = "";  // Define the static member variable
@@ -22,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     videoWidget->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
 
     // Setup External Variables from "global.cpp"
-    this->setWindowTitle("MKV Music Player");
+    this->setWindowTitle("MKV Media Player");
 
     // connect the buttons to routines
     connect(ui->Quit, &QPushButton::clicked, this, &MainWindow::Quit);
@@ -33,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::MediaStatus);
     connect(player, &QMediaPlayer::playbackStateChanged, this, &MainWindow::StateChanged);
     connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::updatePosition);
+    connect(player, &QMediaPlayer::errorOccurred, this, &MainWindow::MediaError);
+
     trackVolume = 0.3;
     ui->volumeSlider->setRange(0, 100);
     ui->volumeSlider->setValue(static_cast<int>(trackVolume * 100)); // Convert 0.0–1.0 to 0–100
@@ -40,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Populate Music Map
     populateMusic();
-    qDebug() << MusicMap;
     MusicIndex = 0;
     Player();
 }

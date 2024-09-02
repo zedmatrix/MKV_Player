@@ -33,7 +33,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     static QString MusicFile;  // Declare as static
-    QString statusMessage, stateMessage, statusPosition, outputText;
+    QString statusMsg, errorMessage, statusMessage, stateMessage, statusPosition, outputText;
     QVector<QMap<QString, QString>> MusicMap;
     QMap<QString, QString> Music;
     int MusicIndex;
@@ -43,6 +43,7 @@ public:
 private slots:
     void MediaStatus(QMediaPlayer::MediaStatus status); // Get Media Status
     void StateChanged(QMediaPlayer::PlaybackState state);
+    void MediaError(QMediaPlayer::Error error, const QString &errorString);
     void Track(bool direction);
     void Quit();
 

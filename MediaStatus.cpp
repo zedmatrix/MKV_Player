@@ -1,10 +1,12 @@
 void MainWindow::updateStatusBar() {
-    ui->statusbar->showMessage(stateMessage + " | " + statusMessage + " | "+ statusPosition);
+    statusMsg = QString("%1 | %2 | %3 | %4 |").arg(errorMessage).arg(stateMessage).arg(statusMessage).arg(statusPosition);
+    ui->statusbar->showMessage(statusMsg);
 }
 
 void MainWindow::MetaDataChanged() {
     QMediaMetaData metaData = player->metaData(); // Retrieve the metadata object
     outputText.clear();
+    outputText = QString("%1\n").arg(MusicMap[MusicIndex]["Filename"]);
 
     if (!metaData.isEmpty()) {
         QMediaMetaData metaData = player->metaData();
@@ -22,10 +24,10 @@ void MainWindow::MetaDataChanged() {
 }
 
 void MainWindow::updatePosition() {
-    qint64 currentPosition = player->position(); // Get current position in milliseconds
-    qint64 duration = player->duration(); // Get total duration in milliseconds
+    qint64 currentPosition = player->position();
+    qint64 duration = player->duration();
 
-        // Format the position and duration for display (e.g., mm:ss)
+    // Format the position and duration for display (e.g., mm:ss)
     QString positionText = QString("%1:%2")
             .arg(currentPosition / 60000) // Minutes
             .arg((currentPosition % 60000) / 1000, 2, 10, QChar('0')); // Seconds
